@@ -1,21 +1,23 @@
 import React from "react"
+import InputTodo from "./InputTodo";
 import Header from "./Reader";
 import TodosList from './TodoList'
+import { v4 as uuidv4 } from "uuid";
 class TodoContainer extends React.Component {
   state = {
     todos: [
       {
-        id: 1,
+        id: uuidv4(),
         title: "Setup development environment",
         completed: true
       },
       {
-        id: 2,
+        id: uuidv4(),
         title: "Develop website and add content",
         completed: false
       },
       {
-        id: 3,
+        id: uuidv4(),
         title: "Deploy to live server",
         completed: false
       }
@@ -46,22 +48,31 @@ class TodoContainer extends React.Component {
     });
   };
 
-  render() { 
-    // render renders the corresponding JSX elements of each particular component
+  addTodoItem = title => {
+    const newTodo = {
+      id: uuidv4(),
+      title: title,
+      completed: false
+    };
+    this.setState({
+      todos: [...this.state.todos, newTodo]
+    });
+  };
+
+  render() {
     return (
-      <> 
-        {/* <> </> this signifies the React.Fragment which wraps all the
-         JSX elements into one single element and returns it */}
-        <div>
+      <div className="container">
+        <div className="inner">
           <Header />
+          <InputTodo addTodoProps={this.addTodoItem} />
           <TodosList
             todos={this.state.todos}
             handleChangeProps={this.handleChange}
             deleteTodoProps={this.delTodo}
           />
         </div>
-      </>
-    )
+      </div>
+    );
   }
 }
 export default TodoContainer

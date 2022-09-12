@@ -9,7 +9,7 @@ class TodoContainer extends React.Component {
       {
         id: uuidv4(),
         title: "Setup development environment",
-        completed: true
+        completed: false
       },
       {
         id: uuidv4(),

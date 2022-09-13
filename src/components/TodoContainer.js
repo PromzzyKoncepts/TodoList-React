@@ -1,61 +1,91 @@
-import React from "react"
-import Header from "./Reader";
-import TodosList from './TodoList'
+/* eslint-disable*/
+
+import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import InputTodo from './InputTodo';
+import Header from './Reader';
+import TodosList from './TodoList';
+
 class TodoContainer extends React.Component {
   state = {
     todos: [
       {
-        id: 1,
-        title: "Setup development environment",
-        completed: true
+        id: uuidv4(),
+        title: 'Setup development environment',
+        completed: false,
       },
       {
-        id: 2,
-        title: "Develop website and add content",
-        completed: false
+        id: uuidv4(),
+        title: 'Develop website and add content',
+        completed: false,
       },
       {
-        id: 3,
-        title: "Deploy to live server",
-        completed: false
-      }
-    ]
+        id: uuidv4(),
+        title: 'Deploy to live server',
+        completed: false,
+      },
+    ],
   };
 
-  handleChange = id => {
-    this.setState(prevState => ({
-      todos: prevState.todos.map(todo => {
+  handleChange = (id) => {
+    this.setState((prevState) => ({
+      todos: prevState.todos.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
             completed: !todo.completed,
-          }
+          };
         }
-        return todo
+        return todo;
       }),
-    }))
+    }));
   }
 
   delTodo = (id) => {
-    console.log("deleted", id);
+    this.setState({
+      todos: [
+        ...this.state.todos.filter((todo) => todo.id !== id),
+      ],
+    });
+  };
+
+  addTodoItem = (title) => {
+    const newTodo = {
+      id: uuidv4(),
+      title,
+      completed: false,
+    };
+    this.setState({
+      todos: [...this.state.todos, newTodo],
+    });
+  };
+
+  setUpdate = (updatedTitle, id) => {
+    this.setState({
+      todos: this.state.todos.map((todo) => {
+        if (todo.id === id) {
+          todo.title = updatedTitle;
+        }
+        return todo;
+      }),
+    });
   }
 
-  render() { 
-    // render renders the corresponding JSX elements of each particular component
+  render() {
     return (
-      <> 
-        {/* <> </> this signifies the React.Fragment which wraps all the
-         JSX elements into one single element and returns it */}
-        <div>
+      <div className="container">
+        <div className="inner">
           <Header />
+          <InputTodo addTodoProps={this.addTodoItem} />
           <TodosList
             todos={this.state.todos}
             handleChangeProps={this.handleChange}
             deleteTodoProps={this.delTodo}
+            setUpdate={this.setUpdate}
           />
         </div>
-      </>
-    )
+      </div>
+    );
   }
 }
-export default TodoContainer
+export default TodoContainer;
